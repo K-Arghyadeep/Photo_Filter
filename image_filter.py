@@ -1,27 +1,76 @@
-# ADD MORE EDITS FROM DOCUMENTATION https://pillow.readthedocs.io/en/stable/
-#https://pillow.readthedocs.io/en/stable/reference/JpegPresets.html
-from PIL import Image, ImageEnhance, ImageFilter
-import os
+from PIL import Image 
 
-#path = "./imgs" # folder for unedited images
-#pathOut = "./editedImgs" # folder for edited images
+#provide the path of the image
+path = input("please provide path to image")
+img = Image.open(path).convert("RGB")
 
-path = input("Enter the address of the image to be edited.")
-pathOut = input("Enter the address to store the edited image.")
+width,height = img.size
 
-for filename in os.listdir(path):
-    img = Image.open(f"{path}/{filename}")
+pixels = img.load()
 
-    # sharpening, BW
-    edit = img.filter(ImageFilter.SHARPEN).convert('L').rotate(-90)
-    edit = img.filter()
-    # contrast
-    factor = 1.5
-    enhancer = ImageEnhance.Contrast(edit)
-    edit = enhancer.enhance(factor)
 
-    
+def red(r,g,b):
+    newr = r
+    newg = 0
+    newb = 0
+    return (newr,newg,newb)
+def darkpink(r,g,b):
+    newr = g
+    newg = b
+    newb = r
+    return (newr,newg,newb)
+def skyblue(r,g,b):
+    newr = b
+    newg = g
+    newb = r
+    return (newr,newg,newb)
+def lemonyellow(r,g,b):
+    newr = g
+    newg = r
+    newb = b
+    return (newr,newg,newb)
+def grey(r,g,b):
+    newr = (r+g+b)//3
+    newg = (r+g+b)//3
+    newb = (r+g+b)//3
+    return (newr,newg,newb)
+def sepia(r,g,b):
+    newr = int((r * .393) + (g *.769) + (b * .189))
+    newg = int((r * .349) + (g *.686) + (b * .168))
+    newb = int((r * .272) + (g *.534) + (b * .131))
+    return (newr,newg,newb)
+choice = '''
+enter you choice
+1:red
+2:darkpink
+3:skybule
+4:lemonyellow
+5:grey
+6:sepia
+'''    
+print(choice)
+no = int(input())
 
-    clean_name = os.path.splitext(filename)[0]
+for py in range(height):
+    for px in range(width):
+      r,g,b = img.getpixel((px,py))
+      if no == 1:
+          pixels[px,py] = red(r,g,b)
+      elif no == 2:
+          pixels[px,py] = darkpink(r,g,b)
+      elif no == 3:
+          pixels[px,py] = skyblue(r,g,b)
+      elif no == 4:
+          pixels[px,py] = lemonyellow(r,g,b)
+      elif no == 5:
+          pixels[px,py] = grey(r,g,b)
+      elif no == 6:
+          pixels[px,py] = sepia(r,g,b)
+      else:
+          pixels[px,py] = (r,g,b)
 
-    edit.save(f'.{pathOut}/{clean_name}_edited.jpg')
+
+
+img.show()
+#add the path where you want to store the filtered image
+img.save(r"C:\Users\Admin\Desktop\Target\Newfilterimg.jpg")
